@@ -20,8 +20,9 @@ public class GenerateController {
     MetaDataService metaDataService;
 
     @RequestMapping("/getMetaData")
-    public void getMetaData(@RequestParam String schema, @RequestParam String tableName) {
+    public List<Map<String, Object>> getMetaData(@RequestParam String schema, @RequestParam String tableName) {
         List<Map<String, Object>> metaDataDTO = metaDataService.getMetaData(schema, tableName);
         System.out.println(metaDataDTO);
+        return metaDataDTO;
     }
 }
