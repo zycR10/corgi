@@ -28,7 +28,7 @@ public class GenerateService {
         for (Map map : metaDataDTOs) {
 
         }
-        
+
         return new Success("succ");
     }
 
@@ -36,8 +36,28 @@ public class GenerateService {
         if (StringUtils.isEmpty(tableName)) {
             return null;
         }
-        // regex
-        String res = tableName.replaceAll("", "");
+        int index = 0;
+        char[] array = tableName.toCharArray();
+        int length = array.length;
+        char c;
+        while (index < length) {
+            c = array[index];
+            if ('_' == c) {
+                // check char is lowercase
+                toUpperCaseChar(++index, array);
+            }
+            index++;
+        }
+        toUpperCaseChar(0, array);
+        String res = new String(array).replaceAll("_", "") + "DTO";
         return res;
+    }
+
+    private void toUpperCaseChar(int index, char[] array) {
+        char replace = array[index];
+        if (replace >= 87 && replace <= 122) {
+            replace -= 32;
+            array[index] = replace;
+        }
     }
 }
