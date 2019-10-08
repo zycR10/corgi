@@ -1,5 +1,7 @@
 package org.zeason.corgi.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/generate")
 public class GenerateController {
+    private final static Logger logger = LoggerFactory.getLogger(GenerateController.class);
+
     @Autowired
     MetaDataService metaDataService;
 
@@ -35,11 +39,17 @@ public class GenerateController {
 
     @RequestMapping("/generate")
     public BaseResponse generate(@RequestParam String schema, @RequestParam String tableName) {
-        List<Map<String, Object>> metaDataDTOs = getMetaData(schema, tableName);
+        List<Map<String, Object>> metaDataDTOs = metaDataService.getMetaData(schema, tableName);
         if (CollectionUtils.isEmpty(metaDataDTOs)) {
             return new Fail("return null");
         }
-        BaseResponse res = generateService.generate(metaDataDTOs, schema, tableName);
+        BaseResponse res;
+        try {
+            res = generateService.generate(metaDataDTOs, schema, tableName);
+        } catch (Exception e) {
+            logger.info("generate file has exception", e);
+            res = new Fail("exception");
+        }
         return res;
     }
 }

@@ -1,5 +1,7 @@
 package org.zeason.corgi.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -7,6 +9,12 @@ import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Success;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -16,18 +24,21 @@ import java.util.Map;
  */
 @Service
 public class GenerateService {
+    private final static Logger logger = LoggerFactory.getLogger(GenerateService.class);
+
     @Value("${file.location}")
     String fileLocation;
 
-    public BaseResponse generate(List<Map<String, Object>> metaDataDTOs, String schema, String tableName) {
+    public BaseResponse generate(List<Map<String, Object>> metaDataDTOs, String schema, String tableName) throws IOException {
         String fileName = generateName(tableName);
         File file = new File(fileLocation + "/" + fileName);
 //        if (file.exists()) {
 //
 //        }
-        for (Map map : metaDataDTOs) {
-
-        }
+        String str = "Hello";
+        Path path = Paths.get(fileName);
+        byte[] strToBytes = str.getBytes();
+        Files.write(path, strToBytes);
 
         return new Success("succ");
     }
@@ -49,7 +60,7 @@ public class GenerateService {
             index++;
         }
         toUpperCaseChar(0, array);
-        String res = new String(array).replaceAll("_", "") + "DTO";
+        String res = new String(array).replaceAll("_", "") + "DTO.java";
         return res;
     }
 
