@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Success;
+import org.zeason.corgi.utils.JdbcTypeUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.JDBCType;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,17 @@ public class GenerateService {
 //        }
         String str = "Hello";
         Path path = Paths.get(fileName);
+        String columnName;
+        String dataType;
+        String columnComment;
+        for(Map<String, Object> metaData : metaDataDTOs) {
+            columnName = (String) metaData.get("COLUMN_NAME");
+            columnComment = (String) metaData.get("COLUMN_COMMENT");
+            if (!StringUtils.isEmpty(columnName)) {
+                JdbcTypeUtils
+            }
+        }
+
         byte[] strToBytes = str.getBytes();
         Files.write(path, strToBytes);
 
