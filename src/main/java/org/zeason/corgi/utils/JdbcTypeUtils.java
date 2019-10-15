@@ -1,8 +1,5 @@
 package org.zeason.corgi.utils;
 
-import org.springframework.util.CollectionUtils;
-
-import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -10,7 +7,7 @@ import java.util.Map;
  * @Date: 2019/10/12 17:18
  */
 public class JdbcTypeUtils {
-    private Map<String, String> typeMap;
+    private static Map<String, String> typeMap;
 
     private void init() {
         typeMap.put("CHAR", "String");
@@ -30,6 +27,9 @@ public class JdbcTypeUtils {
     }
 
     public static String getType(String name) {
-        if (CollectionUtils.isEmpty(name))
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+        return typeMap.get(name);
     }
 }

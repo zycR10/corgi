@@ -40,14 +40,14 @@ public class GenerateService {
         String str = "Hello";
         Path path = Paths.get(fileName);
         String columnName;
-        String dataType;
         String columnComment;
+        String field;
+        StringBuilder sb = new StringBuilder();
         for(Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
             columnComment = (String) metaData.get("COLUMN_COMMENT");
-            if (!StringUtils.isEmpty(columnName)) {
-                JdbcTypeUtils
-            }
+            field = JdbcTypeUtils.getType((String) metaData.get("DATA_TYPE"));
+            sb.append("private " + field + columnName);
         }
 
         byte[] strToBytes = str.getBytes();
