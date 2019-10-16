@@ -1,5 +1,6 @@
 package org.zeason.corgi.utils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -7,9 +8,9 @@ import java.util.Map;
  * @Date: 2019/10/12 17:18
  */
 public class JdbcTypeUtils {
-    private static Map<String, String> typeMap;
+    private static Map<String, String> typeMap = new HashMap<>();
 
-    private void init() {
+    private static void init() {
         typeMap.put("CHAR", "String");
         typeMap.put("VARCHAR", "String");
         typeMap.put("LONGVARCHAR", "String");
@@ -29,6 +30,9 @@ public class JdbcTypeUtils {
     public static String getType(String name) {
         if (StringUtils.isEmpty(name)) {
             return null;
+        }
+        if (CollectionUtils.isEmpty(typeMap)) {
+            init();
         }
         return typeMap.get(name);
     }

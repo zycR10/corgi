@@ -44,9 +44,9 @@ public class GenerateService {
             columnComment = (String) metaData.get("COLUMN_COMMENT");
             field = JdbcTypeUtils.getType((String) metaData.get("DATA_TYPE"));
             if (StringUtils.isNotEmpty(columnComment)) {
-                sb.append("/** " + columnComment + "*/" + "\\r\\n");
+                sb.append("/** " + columnComment + "*/" + "\r\n");
             }
-            sb.append("private " + field + " " + columnName + "\\r\\n");
+            sb.append("private " + field + " " + columnName + ";\r\n");
         }
 
         byte[] strToBytes = sb.toString().getBytes();
