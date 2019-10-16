@@ -4,19 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Success;
 import org.zeason.corgi.utils.JdbcTypeUtils;
+import org.zeason.corgi.utils.StringUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.JDBCType;
 import java.util.List;
 import java.util.Map;
 
@@ -37,22 +34,23 @@ public class GenerateService {
 //        if (file.exists()) {
 //
 //        }
-        String str = "Hello";
         Path path = Paths.get(fileName);
         String columnName;
         String columnComment;
         String field;
         StringBuilder sb = new StringBuilder();
-        for(Map<String, Object> metaData : metaDataDTOs) {
+        for (Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
             columnComment = (String) metaData.get("COLUMN_COMMENT");
             field = JdbcTypeUtils.getType((String) metaData.get("DATA_TYPE"));
-            sb.append("private " + field + columnName);
+            if (StringUtils.isNotEmpty(columnComment)) {
+                sb.append("/** " + columnComment + "*/" + "\\r\\n");
+            }
+            sb.append("private " + field + " " + columnName + "\\r\\n");
         }
 
-        byte[] strToBytes = str.getBytes();
+        byte[] strToBytes = sb.toString().getBytes();
         Files.write(path, strToBytes);
-
         return new Success("succ");
     }
 

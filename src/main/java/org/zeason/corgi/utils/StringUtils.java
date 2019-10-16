@@ -13,4 +13,8 @@ public class StringUtils {
     public static String castToCamel(String str) {
         return "Camel";
     }
+
+    public static boolean isNotEmpty(String columnComment) {
+        return !isEmpty(columnComment);
+    }
 }
