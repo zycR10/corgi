@@ -37,12 +37,14 @@ public class GenerateService {
         Path path = Paths.get(fileName);
         String columnName;
         String columnComment;
+        String dataType;
         String field;
         StringBuilder sb = new StringBuilder();
         for (Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
             columnComment = (String) metaData.get("COLUMN_COMMENT");
-            field = JdbcTypeUtils.getType((String) metaData.get("DATA_TYPE"));
+            dataType = (String) metaData.get("DATA_TYPE");
+            field = JdbcTypeUtils.getType(dataType.toUpperCase());
             if (StringUtils.isNotEmpty(columnComment)) {
                 sb.append("/** " + columnComment + "*/" + "\r\n");
             }
