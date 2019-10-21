@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Success;
+import org.zeason.corgi.utils.FileUtils;
 import org.zeason.corgi.utils.JdbcTypeUtils;
 import org.zeason.corgi.utils.StringUtils;
 
@@ -29,26 +30,27 @@ public class GenerateService {
     String fileLocation;
 
     public BaseResponse generate(List<Map<String, Object>> metaDataDTOs, String schema, String tableName) throws IOException {
-        String fileName = generateName(tableName);
-        File file = new File(fileLocation + "/" + fileName);
+        String className = generateName(tableName);
+        File file = new File(fileLocation + "/" + className);
 //        if (file.exists()) {
 //
 //        }
-        Path path = Paths.get(fileName);
+        Path path = Paths.get(className);
         String columnName;
         String columnComment;
         String dataType;
         String field;
         StringBuilder sb = new StringBuilder();
+        sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS);
         for (Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
             columnComment = (String) metaData.get("COLUMN_COMMENT");
             dataType = (String) metaData.get("DATA_TYPE");
             field = JdbcTypeUtils.getType(dataType.toUpperCase());
             if (StringUtils.isNotEmpty(columnComment)) {
-                sb.append("/** " + columnComment + "*/" + "\r\n");
+                sb.append(FileUtils.getAnnotation(columnComment));
             }
-            sb.append("private " + field + " " + columnName + ";\r\n");
+            sb.append(StringUtils.PRIVATE + field + StringUtils.BLANK + columnName + StringUtils.SEMICOLON);
         }
 
         byte[] strToBytes = sb.toString().getBytes();
