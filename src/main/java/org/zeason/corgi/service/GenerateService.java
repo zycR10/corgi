@@ -39,18 +39,25 @@ public class GenerateService {
         String columnName;
         String columnComment;
         String dataType;
-        String field;
+        String type;
         StringBuilder sb = new StringBuilder();
-        sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS);
+        sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS + "\r\n");
         for (Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
             columnComment = (String) metaData.get("COLUMN_COMMENT");
             dataType = (String) metaData.get("DATA_TYPE");
-            field = JdbcTypeUtils.getType(dataType.toUpperCase());
+            type = JdbcTypeUtils.getType(dataType.toUpperCase());
             if (StringUtils.isNotEmpty(columnComment)) {
                 sb.append(FileUtils.getAnnotation(columnComment));
             }
-            sb.append(StringUtils.PRIVATE + field + StringUtils.BLANK + columnName + StringUtils.SEMICOLON);
+            sb.append(StringUtils.PRIVATE + type + StringUtils.BLANK + columnName + StringUtils.SEMICOLON + "\r\n");
+        }
+
+        for (Map<String, Object> metaData : metaDataDTOs) {
+            columnName = (String) metaData.get("COLUMN_NAME");
+            dataType = (String) metaData.get("DATA_TYPE");
+            type = JdbcTypeUtils.getType(dataType.toUpperCase());
+            sb.append(FileUtils.getSet(columnName, type));
         }
 
         byte[] strToBytes = sb.toString().getBytes();
@@ -70,20 +77,12 @@ public class GenerateService {
             c = array[index];
             if ('_' == c) {
                 // check char is lowercase
-                toUpperCaseChar(++index, array);
+                StringUtils.toUpperCaseChar(++index, array);
             }
             index++;
         }
-        toUpperCaseChar(0, array);
+        StringUtils.toUpperCaseChar(0, array);
         String res = new String(array).replaceAll("_", "") + "DTO.java";
         return res;
-    }
-
-    private void toUpperCaseChar(int index, char[] array) {
-        char replace = array[index];
-        if (replace >= 87 && replace <= 122) {
-            replace -= 32;
-            array[index] = replace;
-        }
     }
 }

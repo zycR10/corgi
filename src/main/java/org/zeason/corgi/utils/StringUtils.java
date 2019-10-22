@@ -8,9 +8,12 @@ package org.zeason.corgi.utils;
 public class StringUtils {
     public static final String BLANK = " ";
     public static final String PUBLIC_CLASS = "public class ";
-    public static final String PRIVATE = "private ";
+    public static final String PUBLIC = "\tpublic ";
+    public static final String PRIVATE = "\tprivate ";
     public static final String SEMICOLON = ";\r\n";
-    public static final String LEFT_PARENTHESIS = "{\r\n";
+    public static final String PARENTHESES = " ()";
+    public static final String LEFT_PARENTHESIS = " {\r\n";
+    public static final String RIGHT_PARENTHESIS = "}\r\n";
 
     public static boolean isEmpty(Object str) {
         return (str == null || "".equals(str));
@@ -22,5 +25,14 @@ public class StringUtils {
 
     public static boolean isNotEmpty(String columnComment) {
         return !isEmpty(columnComment);
+    }
+
+    public static String toUpperCaseChar(int index, char[] array) {
+        char replace = array[index];
+        if (replace >= 87 && replace <= 122) {
+            replace -= 32;
+            array[index] = replace;
+        }
+        return new String(array);
     }
 }

@@ -19,7 +19,7 @@ public class JdbcTypeUtils {
         typeMap.put("BOOLEAN", "boolean");
         typeMap.put("TINYINT", "Byte");
         typeMap.put("SMALLINT", "short");
-        typeMap.put("INT", "INTEGER");
+        typeMap.put("INT", "Integer");
         typeMap.put("BIGINT", "Long");
         typeMap.put("DOUBLE", "Double");
         typeMap.put("DATE", "Date");
