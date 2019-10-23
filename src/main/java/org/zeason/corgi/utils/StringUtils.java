@@ -11,7 +11,10 @@ public class StringUtils {
     public static final String PUBLIC = "\tpublic ";
     public static final String PRIVATE = "\tprivate ";
     public static final String SEMICOLON = ";\r\n";
-    public static final String PARENTHESES = " ()";
+    public static final String PARENTHESES = "()";
+    public static final String LEFT_BRACKET = "(";
+    public static final String RIGHT_BRACKET = ")";
+    public static final String EQUAL = " = ";
     public static final String LEFT_PARENTHESIS = " {\r\n";
     public static final String RIGHT_PARENTHESIS = "}\r\n";
 

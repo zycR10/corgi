@@ -31,11 +31,12 @@ public class GenerateService {
 
     public BaseResponse generate(List<Map<String, Object>> metaDataDTOs, String schema, String tableName) throws IOException {
         String className = generateName(tableName);
-        File file = new File(fileLocation + "/" + className);
+        String fileName = className + ".java";
+        File file = new File(fileLocation + "/" + fileName);
 //        if (file.exists()) {
 //
 //        }
-        Path path = Paths.get(className);
+        Path path = Paths.get(fileName);
         String columnName;
         String columnComment;
         String dataType;
@@ -57,8 +58,9 @@ public class GenerateService {
             columnName = (String) metaData.get("COLUMN_NAME");
             dataType = (String) metaData.get("DATA_TYPE");
             type = JdbcTypeUtils.getType(dataType.toUpperCase());
-            sb.append(FileUtils.getSet(columnName, type));
+            sb.append(FileUtils.getSet(className, columnName, type));
         }
+        sb.append(StringUtils.RIGHT_PARENTHESIS);
 
         byte[] strToBytes = sb.toString().getBytes();
         Files.write(path, strToBytes);
@@ -82,7 +84,7 @@ public class GenerateService {
             index++;
         }
         StringUtils.toUpperCaseChar(0, array);
-        String res = new String(array).replaceAll("_", "") + "DTO.java";
+        String res = new String(array).replaceAll("_", "") + "DTO";
         return res;
     }
 }

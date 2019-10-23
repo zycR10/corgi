@@ -5,13 +5,20 @@ package org.zeason.corgi.utils;
  * @Date: 2019/10/21 23:05
  */
 public class FileUtils {
-    public static String getSet(String field, String type) {
+    public static String getSet(String className, String field, String type) {
         //todo
         StringBuilder sb = new StringBuilder();
         sb.append(StringUtils.PUBLIC + type + StringUtils.BLANK + "get" +
                 StringUtils.toUpperCaseChar(0, field.toCharArray()))
                 .append(StringUtils.PARENTHESES + StringUtils.LEFT_PARENTHESIS)
                 .append("\t\treturn this." + field + StringUtils.SEMICOLON)
+                .append("\t" + StringUtils.RIGHT_PARENTHESIS);
+        sb.append(StringUtils.PUBLIC + className + StringUtils.BLANK + "set" +
+                StringUtils.toUpperCaseChar(0, field.toCharArray()))
+                .append(StringUtils.LEFT_BRACKET + type + StringUtils.BLANK + field + StringUtils.RIGHT_BRACKET
+                        + StringUtils.LEFT_PARENTHESIS)
+                .append("\t\tthis." + field + StringUtils.EQUAL + field + StringUtils.SEMICOLON)
+                .append("\t\treturn this" + StringUtils.SEMICOLON)
                 .append("\t" + StringUtils.RIGHT_PARENTHESIS);
         return sb.toString();
     }
