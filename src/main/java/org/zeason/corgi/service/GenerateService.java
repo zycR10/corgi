@@ -32,11 +32,11 @@ public class GenerateService {
     public BaseResponse generate(List<Map<String, Object>> metaDataDTOs, String schema, String tableName) throws IOException {
         String className = generateName(tableName);
         String fileName = className + ".java";
-        File file = new File(fileLocation + "/" + fileName);
 //        if (file.exists()) {
 //
 //        }
-        Path path = Paths.get(fileName);
+        String fileLocate = new File(".").getCanonicalPath() + fileLocation + fileName;
+        Path path = Paths.get(fileLocate);
         String columnName;
         String columnComment;
         String dataType;
