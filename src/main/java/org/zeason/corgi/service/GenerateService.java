@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.zeason.corgi.dto.MetaDataDTO;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Success;
 import org.zeason.corgi.utils.FileUtils;
@@ -38,29 +39,26 @@ public class GenerateService {
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-
-        String columnName;
-        String columnComment;
-        String dataType;
+        MetaDataDTO dto = new MetaDataDTO();
         String type;
         StringBuilder sb = new StringBuilder();
         sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS + "\r\n");
         for (Map<String, Object> metaData : metaDataDTOs) {
-            columnName = (String) metaData.get("COLUMN_NAME");
-            columnComment = (String) metaData.get("COLUMN_COMMENT");
-            dataType = (String) metaData.get("DATA_TYPE");
-            type = JdbcTypeUtils.getType(dataType.toUpperCase());
-            if (StringUtils.isNotEmpty(columnComment)) {
-                sb.append(FileUtils.getAnnotation(columnComment));
+            dto.setColumn_name((String) metaData.get("COLUMN_NAME"));
+            dto.setColumn_comment((String) metaData.get("COLUMN_COMMENT"));
+            dto.setData_type((String) metaData.get("DATA_TYPE"));
+            type = JdbcTypeUtils.getType(dto.getData_type().toUpperCase());
+            if (StringUtils.isNotEmpty(dto.getColumn_comment())) {
+                sb.append(FileUtils.getAnnotation(dto.getColumn_comment()));
             }
-            sb.append(StringUtils.PRIVATE + type + StringUtils.BLANK + columnName + StringUtils.SEMICOLON + "\r\n");
+            sb.append(StringUtils.PRIVATE + type + StringUtils.BLANK + dto.getColumn_name() + StringUtils.SEMICOLON + "\r\n");
         }
 
         for (Map<String, Object> metaData : metaDataDTOs) {
-            columnName = (String) metaData.get("COLUMN_NAME");
-            dataType = (String) metaData.get("DATA_TYPE");
-            type = JdbcTypeUtils.getType(dataType.toUpperCase());
-            sb.append(FileUtils.getSet(className, columnName, type));
+            dto.setColumn_name((String) metaData.get("COLUMN_NAME"));
+            dto.setData_type((String) metaData.get("DATA_TYPE"));
+            type = JdbcTypeUtils.getType(dto.getData_type().toUpperCase());
+            sb.append(FileUtils.getSet(className, dto.getColumn_name(), type));
         }
         sb.append(StringUtils.RIGHT_PARENTHESIS);
 
