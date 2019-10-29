@@ -9,4 +9,9 @@ public class Success extends BaseResponse {
         super.setRs(1);
         setResultMessage(resultMessage);
     }
+
+    public Success() {
+        setRs(1);
+        setResultMessage("success");
+    }
 }

@@ -1,12 +1,12 @@
 package org.zeason.corgi.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.zeason.corgi.gen_code.dto.TUserInfoDTO;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Fail;
 import org.zeason.corgi.service.GenerateService;
@@ -20,7 +20,7 @@ import java.util.Map;
  * @Date: 2019/9/6 16:28
  */
 @RestController
-@RequestMapping("/generate")
+@RequestMapping("/base")
 public class GenerateController {
     private final static Logger logger = LoggerFactory.getLogger(GenerateController.class);
 
@@ -37,8 +37,10 @@ public class GenerateController {
         return metaDataDTO;
     }
 
-    @RequestMapping("/generate")
-    public BaseResponse generate(@RequestParam String schema, @RequestParam String tableName) {
+    @RequestMapping(value = "/generate", method = RequestMethod.GET)
+    public BaseResponse generate(@RequestBody JSONObject data) {
+        String schema = data.getString("scheme");
+        String tableName = data.getString("tableName");
         List<Map<String, Object>> metaDataDTOs = metaDataService.getMetaData(schema, tableName);
         if (CollectionUtils.isEmpty(metaDataDTOs)) {
             return new Fail("return null");
@@ -48,7 +50,7 @@ public class GenerateController {
             res = generateService.generate(metaDataDTOs, schema, tableName);
         } catch (Exception e) {
             logger.info("generate file has exception", e);
-            res = new Fail("exception");
+            res = new Fail("exception : " + e.getMessage());
         }
         return res;
     }

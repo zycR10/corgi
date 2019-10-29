@@ -9,4 +9,9 @@ public class Fail extends BaseResponse {
         super.setRs(0);
         super.setResultMessage(resultMessage);
     }
+
+    public Fail() {
+        setRs(0);
+        setResultMessage("fail");
+    }
 }

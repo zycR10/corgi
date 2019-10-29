@@ -33,17 +33,19 @@ public class GenerateService {
         String className = generateName(tableName);
         String fileName = className + ".java";
 
-        String fileLocate = new File(".").getCanonicalPath() + fileLocation + fileName;
+        String fileLocate = new File(".").getCanonicalPath() + fileLocation;
         Path path = Paths.get(fileLocate);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
-
+        path = Paths.get(fileLocate + fileName);
         String columnName;
         String columnComment;
         String dataType;
         String type;
         StringBuilder sb = new StringBuilder();
+        sb.append("package" + StringUtils.BLANK + this.getClass().getPackage().getName()
+                .replace("service", "gen_code.dto" + StringUtils.SEMICOLON));
         sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS + "\r\n");
         for (Map<String, Object> metaData : metaDataDTOs) {
             columnName = (String) metaData.get("COLUMN_NAME");
@@ -66,7 +68,7 @@ public class GenerateService {
 
         byte[] strToBytes = sb.toString().getBytes();
         Files.write(path, strToBytes);
-        return new Success("succ");
+        return new Success();
     }
 
     private String generateName(String tableName) {
