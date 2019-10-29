@@ -8,7 +8,6 @@ import org.zeason.corgi.dto.MetaDataDTO;
 public class CorgiApplication {
 
 	public static void main(String[] args) {
-		MetaDataDTO dto = new MetaDataDTO();
 		SpringApplication.run(CorgiApplication.class, args);
 	}
 
