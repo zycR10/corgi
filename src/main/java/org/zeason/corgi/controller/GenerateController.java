@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.zeason.corgi.gen_code.dto.TUserInfoDTO;
 import org.zeason.corgi.response.BaseResponse;
 import org.zeason.corgi.response.Fail;
 import org.zeason.corgi.service.GenerateService;
