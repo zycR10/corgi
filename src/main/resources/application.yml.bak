@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: {db url}
+    username: {username}
+    password: {password}
+server:
+  port: {port}
+  servlet:
+    context-path: {type your context path here}
+file:
+  location: {generate file path}

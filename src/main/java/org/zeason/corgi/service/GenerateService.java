@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -34,14 +36,24 @@ public class GenerateService {
         String className = generateName(tableName);
         String fileName = className + ".java";
 
-        String fileLocate = new File(".").getCanonicalPath() + fileLocation + fileName;
+        String fileLocate = new File(".").getCanonicalPath() + fileLocation;
         Path path = Paths.get(fileLocate);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
         }
+        path = Paths.get(fileLocate + fileName);
         MetaDataDTO dto = new MetaDataDTO();
         String type;
         StringBuilder sb = new StringBuilder();
+        sb.append("package" + StringUtils.BLANK + this.getClass().getPackage().getName()
+                .replace("service", "gen_code.dto" + StringUtils.SEMICOLON) + "\r\n");
+        sb.append("/**\r\n");
+        sb.append(" * DTO model for table #{ " + tableName + " }\r\n");
+        sb.append(" * \r\n");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String now = localDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
+        sb.append(" * @Date: " + now + " \r\n");
+        sb.append("*/\r\n");
         sb.append(StringUtils.PUBLIC_CLASS + className + StringUtils.LEFT_PARENTHESIS + "\r\n");
         for (Map<String, Object> metaData : metaDataDTOs) {
             dto.setColumn_name((String) metaData.get("COLUMN_NAME"));
